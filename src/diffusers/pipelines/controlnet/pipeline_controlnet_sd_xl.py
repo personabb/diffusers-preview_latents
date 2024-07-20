@@ -1517,8 +1517,9 @@ class StableDiffusionXLControlNetPipeline(
 
                 # compute the previous noisy sample x_t -> x_t-1
                 #latents = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs, return_dict=False)[0]
-                latents = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs, return_dict=True).prev_sample
-                skip_x0 = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs, return_dict=True).pred_original_sample
+                latent_all = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs, return_dict=True)
+                latents = latent_all.prev_sample
+                skip_x0 = latent_all.pred_original_sample
 
                 if callback_on_step_end is not None:
                     callback_kwargs = {}
