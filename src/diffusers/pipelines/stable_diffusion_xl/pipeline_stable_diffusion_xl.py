@@ -1220,7 +1220,9 @@ class StableDiffusionXLPipeline(
                 latents_dtype = latents.dtype
                 latent_all = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs, return_dict=True)
                 latents = latent_all.prev_sample
-                skip_x0 = latent_all.pred_original_sample
+                skip_x0 = None
+                if hasattr(latent_all, 'pred_original_sample'):
+                    skip_x0 = latent_all.pred_original_sample
                 
                 if latents.dtype != latents_dtype:
                     if torch.backends.mps.is_available():
